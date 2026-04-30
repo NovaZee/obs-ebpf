@@ -19,17 +19,19 @@ typedef __u16 __sum16;
 #define __uint(name, val) int (*name)[val]
 
 enum bpf_map_type {
-	BPF_MAP_TYPE_RINGBUF = 27,
+	BPF_MAP_TYPE_PERF_EVENT_ARRAY = 4,
 };
+
+#define BPF_F_INDEX_MASK 0xffffffffULL
+#define BPF_F_CURRENT_CPU BPF_F_INDEX_MASK
 
 static __u64 (*bpf_get_current_pid_tgid)(void) = (void *)14;
 static __u64 (*bpf_get_current_uid_gid)(void) = (void *)15;
 static long (*bpf_get_current_comm)(void *buf, __u32 size_of_buf) = (void *)16;
+static long (*bpf_perf_event_output)(void *ctx, void *map, __u64 flags, void *data, __u64 size) = (void *)25;
 static __u64 (*bpf_get_current_task)(void) = (void *)35;
 static long (*bpf_probe_read_kernel)(void *dst, __u32 size, const void *unsafe_ptr) = (void *)113;
 static long (*bpf_probe_read_user_str)(void *dst, __u32 size, const void *unsafe_ptr) = (void *)114;
-static void *(*bpf_ringbuf_reserve)(void *ringbuf, __u64 size, __u64 flags) = (void *)131;
-static void (*bpf_ringbuf_submit)(void *data, __u64 flags) = (void *)132;
 
 struct task_struct {
 	struct task_struct *real_parent;

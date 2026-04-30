@@ -12,7 +12,7 @@ import (
 
 	"github.com/NovaZee/obs-ebpf/internal/process"
 	"github.com/cilium/ebpf/link"
-	"github.com/cilium/ebpf/ringbuf"
+	"github.com/cilium/ebpf/perf"
 	"github.com/cilium/ebpf/rlimit"
 )
 
@@ -41,9 +41,9 @@ func run() error {
 	}
 	defer tracepoint.Close()
 
-	reader, err := ringbuf.NewReader(objects.Events)
+	reader, err := perf.NewReader(objects.Events, os.Getpagesize()*8)
 	if err != nil {
-		return fmt.Errorf("open ring buffer: %w", err)
+		return fmt.Errorf("open perf event reader: %w", err)
 	}
 	defer reader.Close()
 
@@ -57,10 +57,13 @@ func run() error {
 	for {
 		record, err := reader.Read()
 		if err != nil {
-			if errors.Is(err, ringbuf.ErrClosed) {
+			if errors.Is(err, perf.ErrClosed) {
 				return nil
 			}
-			return fmt.Errorf("read ring buffer: %w", err)
+			return fmt.Errorf("read perf event: %w", err)
+		}
+		if record.LostSamples != 0 {
+			continue
 		}
 
 		event, err := process.DecodeExecEvent(record.RawSample)
