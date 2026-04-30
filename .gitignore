@@ -1,0 +1,10 @@
+.idea/
+.DS_Store
+
+# Go 构建产物
+bin/
+coverage.out
+
+# eBPF 编译产物
+*.bpf.o
+*.o
