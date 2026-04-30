@@ -1,8 +1,6 @@
 //go:build ignore
 
 #include "vmlinux.h"
-#include <bpf/bpf_core_read.h>
-#include <bpf/bpf_helpers.h>
 
 char LICENSE[] SEC("license") = "Dual BSD/GPL";
 
@@ -43,7 +41,8 @@ int handle_execve(struct trace_event_raw_sys_enter *ctx)
 
 	event->pid = pid_tgid >> 32;
 	event->uid = uid_gid & 0xffffffff;
-	event->ppid = BPF_CORE_READ(task, real_parent, tgid);
+	bpf_probe_read_kernel(&task, sizeof(task), &task->real_parent);
+	bpf_probe_read_kernel(&event->ppid, sizeof(event->ppid), &task->tgid);
 	bpf_get_current_comm(event->comm, sizeof(event->comm));
 	bpf_probe_read_user_str(event->filename, sizeof(event->filename), filename);
 
