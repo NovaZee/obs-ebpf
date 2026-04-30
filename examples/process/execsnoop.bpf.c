@@ -37,10 +37,10 @@ int handle_execve(struct trace_event_raw_sys_enter *ctx)
 
 	event.pid = pid_tgid >> 32;
 	event.uid = uid_gid & 0xffffffff;
-	bpf_probe_read_kernel(&task, sizeof(task), &task->real_parent);
-	bpf_probe_read_kernel(&event.ppid, sizeof(event.ppid), &task->tgid);
+	bpf_probe_read(&task, sizeof(task), &task->real_parent);
+	bpf_probe_read(&event.ppid, sizeof(event.ppid), &task->tgid);
 	bpf_get_current_comm(event.comm, sizeof(event.comm));
-	bpf_probe_read_user_str(event.filename, sizeof(event.filename), filename);
+	bpf_probe_read_str(event.filename, sizeof(event.filename), filename);
 
 	bpf_perf_event_output(ctx, &events, BPF_F_CURRENT_CPU, &event, sizeof(event));
 	return 0;

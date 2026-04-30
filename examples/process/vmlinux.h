@@ -30,8 +30,8 @@ static __u64 (*bpf_get_current_uid_gid)(void) = (void *)15;
 static long (*bpf_get_current_comm)(void *buf, __u32 size_of_buf) = (void *)16;
 static long (*bpf_perf_event_output)(void *ctx, void *map, __u64 flags, void *data, __u64 size) = (void *)25;
 static __u64 (*bpf_get_current_task)(void) = (void *)35;
-static long (*bpf_probe_read_kernel)(void *dst, __u32 size, const void *unsafe_ptr) = (void *)113;
-static long (*bpf_probe_read_user_str)(void *dst, __u32 size, const void *unsafe_ptr) = (void *)114;
+static long (*bpf_probe_read)(void *dst, __u32 size, const void *unsafe_ptr) = (void *)4;
+static long (*bpf_probe_read_str)(void *dst, __u32 size, const void *unsafe_ptr) = (void *)45;
 
 struct task_struct {
 	struct task_struct *real_parent;
