@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io"
 	"strings"
+
+	"github.com/NovaZee/obs-ebpf/internal/process"
 )
 
 const overview = `obs-ebpf 是一个 Go 优先的 eBPF 可观测性学习与实践项目。
@@ -26,7 +28,7 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 
 	switch strings.ToLower(args[1]) {
 	case "process":
-		fmt.Fprintln(stdout, "进程观测学习阶段：先从 exec/exit 事件开始，打通 eBPF 到 Go 的事件链路。")
+		fmt.Fprintln(stdout, process.LearningHint())
 		return 0
 	case "network":
 		fmt.Fprintln(stdout, "网络观测学习阶段：先从 TCP connect 事件开始，采集 PID、进程名、目标地址和端口。")
