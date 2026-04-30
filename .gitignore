@@ -1,10 +1,32 @@
-.idea/
+# macOS
 .DS_Store
 
-# Go 构建产物
-bin/
-coverage.out
+# Editor/IDE
+.idea/
+.vscode/
 
-# eBPF 编译产物
+# Go binaries and plugins
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go test and coverage artifacts
+*.test
+*.out
+coverage.*
+*.coverprofile
+profile.cov
+
+# Go workspace files
+go.work
+go.work.sum
+
+# Environment files
+.env
+
+# eBPF build artifacts
 *.bpf.o
 *.o
